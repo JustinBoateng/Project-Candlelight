@@ -2,8 +2,10 @@ ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
     - CameraFollow
+    - Door
     - Inventory
     - Item
+    - Ladder
     - MenuNavigation
     - Movement
     Unity.2D.Tilemap.Editor.dll:
@@ -143,85 +145,89 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 12510}
     - Class: 114
-      Script: {instanceID: 12634}
+      Script: {instanceID: 12606}
     - Class: 114
-      Script: {instanceID: 12932}
+      Script: {instanceID: 12636}
     - Class: 114
-      Script: {instanceID: 12990}
+      Script: {instanceID: 12934}
     - Class: 114
-      Script: {instanceID: 13036}
+      Script: {instanceID: 12992}
     - Class: 114
-      Script: {instanceID: 13082}
+      Script: {instanceID: 13038}
     - Class: 114
-      Script: {instanceID: 13108}
+      Script: {instanceID: 13084}
     - Class: 114
       Script: {instanceID: 13110}
     - Class: 114
-      Script: {instanceID: 13258}
+      Script: {instanceID: 13112}
     - Class: 114
-      Script: {instanceID: 13320}
+      Script: {instanceID: 13260}
     - Class: 114
-      Script: {instanceID: 13380}
+      Script: {instanceID: 13322}
     - Class: 114
-      Script: {instanceID: 13520}
+      Script: {instanceID: 13382}
     - Class: 114
-      Script: {instanceID: 13632}
+      Script: {instanceID: 13522}
     - Class: 114
-      Script: {instanceID: 13676}
+      Script: {instanceID: 13634}
     - Class: 114
-      Script: {instanceID: 13750}
+      Script: {instanceID: 13678}
     - Class: 114
-      Script: {instanceID: 13872}
+      Script: {instanceID: 13752}
     - Class: 114
-      Script: {instanceID: 14240}
+      Script: {instanceID: 13874}
     - Class: 114
-      Script: {instanceID: 14560}
+      Script: {instanceID: 14244}
     - Class: 114
-      Script: {instanceID: 14628}
+      Script: {instanceID: 14564}
     - Class: 114
       Script: {instanceID: 14632}
     - Class: 114
-      Script: {instanceID: 14648}
+      Script: {instanceID: 14636}
     - Class: 114
-      Script: {instanceID: 14656}
+      Script: {instanceID: 14652}
     - Class: 114
-      Script: {instanceID: 14790}
+      Script: {instanceID: 14660}
     - Class: 114
-      Script: {instanceID: 14830}
+      Script: {instanceID: 14794}
     - Class: 114
-      Script: {instanceID: 14838}
+      Script: {instanceID: 14834}
     - Class: 114
-      Script: {instanceID: 15072}
+      Script: {instanceID: 14842}
     - Class: 114
-      Script: {instanceID: 15190}
+      Script: {instanceID: 15076}
     - Class: 114
-      Script: {instanceID: 15272}
+      Script: {instanceID: 15194}
     - Class: 114
-      Script: {instanceID: 15548}
+      Script: {instanceID: 15276}
     - Class: 114
-      Script: {instanceID: 15600}
+      Script: {instanceID: 15288}
     - Class: 114
-      Script: {instanceID: 15738}
+      Script: {instanceID: 15554}
     - Class: 114
-      Script: {instanceID: 15792}
+      Script: {instanceID: 15606}
     - Class: 114
-      Script: {instanceID: 15876}
+      Script: {instanceID: 15744}
     - Class: 114
-      Script: {instanceID: 16010}
+      Script: {instanceID: 15798}
     - Class: 114
-      Script: {instanceID: 16012}
+      Script: {instanceID: 15882}
     - Class: 114
-      Script: {instanceID: 16044}
+      Script: {instanceID: 16016}
     - Class: 114
-      Script: {instanceID: 16072}
+      Script: {instanceID: 16018}
     - Class: 114
-      Script: {instanceID: 16132}
+      Script: {instanceID: 16050}
     - Class: 114
-      Script: {instanceID: 16160}
+      Script: {instanceID: 16078}
     - Class: 114
-      Script: {instanceID: 16210}
+      Script: {instanceID: 16138}
     - Class: 114
-      Script: {instanceID: 16218}
+      Script: {instanceID: 16166}
+    - Class: 114
+      Script: {instanceID: 16216}
+    - Class: 114
+      Script: {instanceID: 16224}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -459,6 +465,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
     className: SignalAsset
+  - hash:
+      serializedVersion: 2
+      Hash: 239eaf3dc90222141d27496d05c40ad4
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Ladder
   - hash:
       serializedVersion: 2
       Hash: 0dbc3be398b4869a5c8d0d8481ee402c
@@ -704,6 +716,12 @@ ScriptsOnlyBuild:
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
+    className: Interactable
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
     className: Hole
   - hash:
       serializedVersion: 2
@@ -941,6 +959,12 @@ ScriptsOnlyBuild:
     className: DebugUIHandlerValue
   - hash:
       serializedVersion: 2
+      Hash: 449b3438f2c4f7ef40812d0728ae3009
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Door
+  - hash:
+      serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: Unity.RenderPipelines.Universal.Runtime.dll
     namespaceName: UnityEngine.Experimental.Rendering.Universal
@@ -1145,7 +1169,7 @@ ScriptsOnlyBuild:
     className: CoroutineExecutor
   - hash:
       serializedVersion: 2
-      Hash: 3983260cc9ab76ba9163d0076b1155b0
+      Hash: 6bfa150dba67dce9329773ebdb1f4e2a
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Movement
@@ -1188,4 +1212,5 @@ ScriptsOnlyBuild:
   platform: 19
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: C:/Users/USER/Desktop/Project-Candlelight/P CL/Project CandleLight.exe
+  playerPath: C:/Users/USER/Desktop/Project-Candlelight/Project CandleLight Alpha
+    0.0.1 Windowed/Project CandleLight.exe

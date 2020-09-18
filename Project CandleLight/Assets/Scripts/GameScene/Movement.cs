@@ -19,6 +19,7 @@ public class Movement : MonoBehaviour {
     [SerializeField] private LayerMask GroundLayerMask;
     [SerializeField] private LayerMask ItemsLayerMask; //NOTE THE NEW ITEMS LAYER MASK ADDITION
     [SerializeField] private LayerMask LightLayerMask;
+    [SerializeField] private LayerMask InteractableLayerMask; 
     public float LightCheckRadius;
 
     //Walking and Running Values
@@ -32,6 +33,7 @@ public class Movement : MonoBehaviour {
     private float tapTime = 0;                  //DoubleTap inputCheck for Running
     private float lastTapTime;          
     private int tapCheck = 0;
+    private int facing = 1;                     //Check which way we're facing. 1 = right, -1 = left.  
 
     //Image Flipping Value
     private float originalxscale;       
@@ -57,18 +59,22 @@ public class Movement : MonoBehaviour {
     private GameObject itemHold;                //The name of the item we are holding
     private bool Holding = false;               //Are we Holding an Object right now?
     public Transform HoldPoint;
-    //public Transform ItemPoint;                 //The space where our held object stays
-    //public Transform DropPoint;                 //where we'd put down the object    
     RaycastHit2D ItemDetectRay;                 //check for Items to your front/center
-    //RaycastHit2D LeftItemDetectRay;           //Check for Items to your left
-    //RaycastHit2D CrouchItemDetectRay;         //Check for Items to your below
-
-
-    private int facing = 1;                     //Check which way we're facing. 1 = right, -1 = left.  
-    private bool Lit = false;
-
     float itemadditionalsize;
     float baseStandingColliderSizeX;
+
+    //Light Detection Values
+    private bool Lit = false;
+    [SerializeField] LayerMask RegularMask;
+    [SerializeField] LayerMask HoldingAGlowingObjectMask;
+
+    //Interaction Values
+    RaycastHit2D InteractableDetectRay;
+    private GameObject interactIdle;
+    private bool interactCheck = false;
+    private Interactable InterObjReference;
+    bool onLadder = false;
+    private bool walkthroughdoor = false;
 
     // Use this for initialization
     void Start () {
@@ -90,10 +96,12 @@ public class Movement : MonoBehaviour {
         vertical = Input.GetAxisRaw("Vertical");
 
 
-        HandleMovement();
+        if (onLadder) HandleLadderMovement();
+        else HandleMovement();
         RunCheck();
         Grounded = (Physics2D.OverlapCircle(GroundPoint.position, GroundPointCheckRadius, GroundLayerMask) || Physics2D.OverlapCircle(GroundPoint.position, GroundPointCheckRadius, ItemsLayerMask));
         IsOnItem();
+        IsNextTointeractable();
 
         if (!Grounded || vertical < 0) canJump = false;
         else canJump = true;
@@ -101,18 +109,14 @@ public class Movement : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Jump")) Jump();
         if (Input.GetKeyDown(KeyCode.Z) || Input.GetButtonDown("Pickup")) PickUp();
+        if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetAxisRaw("Vertical") == 1) && interactCheck == true) Interact(interactIdle.gameObject.GetComponent<Interactable>().getType());
+        if (Input.GetKeyUp(KeyCode.UpArrow)) walkthroughdoor = false;
 
         Lit = (Physics2D.OverlapCircle(transform.position, LightCheckRadius ,LightLayerMask));
 
         if (Lit) Debug.Log("Within Light, Edge Radius = " + myStandingCollider.edgeRadius);
         else Debug.Log("Within Darkness");
 
-        /*if (Input.GetKeyDown(KeyCode.Backspace)||Input.GetButtonDown("Pause"))
-        {
-            Debug.Log("Paused");
-            Menu.gameObject.SetActive(MenuToggle);
-            MenuToggle = !MenuToggle;
-        }*/
     }
 
 
@@ -124,6 +128,8 @@ public class Movement : MonoBehaviour {
 
     private void HandleMovement()
     {
+        myRigidBody.gravityScale = 1;
+
         if (horizontal > 0)
         {
             facing = 1;
@@ -151,13 +157,22 @@ public class Movement : MonoBehaviour {
 
         if (runState == true) Speed = RunSpeed; //running
         else Speed = BaseSpeed; //walking
+        
+        //if()//next to a ladder and pressing up
 
         myRigidBody.velocity = new Vector2(horizontal * Speed, myRigidBody.velocity.y);
     }
 
+    private void HandleLadderMovement()
+    {
+        myRigidBody.gravityScale = 0;
+        myRigidBody.velocity = new Vector2(0, vertical * Speed);
+
+    }
 
     private void Jump()
     {
+        if (onLadder) onLadder = false;
         if (canJump) myRigidBody.velocity = new Vector2(myRigidBody.velocity.x, +1 * jumpVelocity);
     }
 
@@ -180,6 +195,25 @@ public class Movement : MonoBehaviour {
         }
     }
 
+    private void IsNextTointeractable()
+    {
+        Debug.DrawRay(transform.position + new Vector3(0, -0.05f, 0), transform.right * facing, Color.blue);
+        InteractableDetectRay = Physics2D.Raycast(transform.position + new Vector3(0, -0.05f, 0), transform.right * facing, 0.25f, InteractableLayerMask);
+        //ObjectDetectRay = Physics2D.Raycast(transform.position, transform.right * facing, 0.5f, ItemsLayerMask);
+
+
+        if (InteractableDetectRay.collider != null)
+        {
+            interactCheck = true;
+            interactIdle = InteractableDetectRay.collider.gameObject;
+        }
+        else
+        {
+            interactCheck = false;
+            interactIdle = null;
+        }
+    }
+
     private void PickUp()
     {
         if (itemHold == null) //if we're not holding an object
@@ -190,7 +224,6 @@ public class Movement : MonoBehaviour {
                 if (itemIdle.gameObject.GetComponent<Item>().ItemType == "OBJ" && itemHold == null)
                 {
                     itemHold = itemIdle; //our held item is now the item next to Teller
-
                     
 
                     myStandingCollider.size = new Vector2(myStandingCollider.size.x + itemHold.GetComponent<BoxCollider2D>().size.x , myStandingCollider.size.y);
@@ -205,6 +238,8 @@ public class Movement : MonoBehaviour {
                     //itemIdle = null; //Teller is no longer next to an object
 
                     Speed = BaseSpeed / 2;
+
+                    if (itemHold.GetComponentInChildren<CircleCollider2D>().isActiveAndEnabled) gameObject.layer = LayerMask.NameToLayer("PlayerWithLight"); //if the item emit's a light source, change player's mask to "PlayerWithLight" so that doors detect her as a light source, as well as other things 
 
                     return;
                 }//if it's a liftable item
@@ -240,8 +275,30 @@ public class Movement : MonoBehaviour {
 
             itemHold = null;
 
+            gameObject.layer = LayerMask.NameToLayer("Player"); //by dropping an object with light, the player is, in of themselves, no longer a light source
+
             return;
         }//ItemHold != null, that is, we're holding something
+    }
+
+    private void Interact(String InterType)
+    {
+        switch (InterType)
+        {
+            case "Ladder":
+                if (onLadder || itemHold != null) break; //if we're already on a ladder, or holding an object, then we dont START climbing the ladder again/at all
+                onLadder = true; //set movement type to Ladder mode
+                transform.position = new Vector3(interactIdle.gameObject.transform.position.x, transform.position.y, transform.position.z); //snap protag to ladder's x position      
+                interactIdle.gameObject.GetComponent<Ladder>().PlatformToggle(); //toggle platforms attached to the ladder                
+                break;
+
+            case "Door":
+                if (walkthroughdoor == true) break;//press up once, go through the door once. No holding to smap back and forth per frame                
+                Door OtherDoor = interactIdle.gameObject.GetComponent<Door>().GetOtherDoor();
+                transform.position = OtherDoor.gameObject.transform.position;
+                walkthroughdoor = true;                
+                break;
+        }
     }
 
 
