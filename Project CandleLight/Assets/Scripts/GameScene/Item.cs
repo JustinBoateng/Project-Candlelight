@@ -10,6 +10,6 @@ public class Item  : MonoBehaviour {
     public string description;
     public string code;
     public int SlotNumber;
-
+    public string SourceType = "";
 
 }

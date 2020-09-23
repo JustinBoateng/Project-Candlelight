@@ -239,7 +239,7 @@ public class Movement : MonoBehaviour {
 
                     Speed = BaseSpeed / 2;
 
-                    if (itemHold.GetComponentInChildren<CircleCollider2D>().isActiveAndEnabled) gameObject.layer = LayerMask.NameToLayer("PlayerWithLight"); //if the item emit's a light source, change player's mask to "PlayerWithLight" so that doors detect her as a light source, as well as other things 
+                    if ((itemHold.GetComponentInChildren<CircleCollider2D>()) && (itemHold.GetComponentInChildren<CircleCollider2D>().isActiveAndEnabled)) gameObject.layer = LayerMask.NameToLayer("PlayerWithLight"); //if the item emit's a light source, change player's mask to "PlayerWithLight" so that doors detect her as a light source, as well as other things 
 
                     return;
                 }//if it's a liftable item

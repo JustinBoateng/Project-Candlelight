@@ -41,14 +41,15 @@ public class Door : Interactable
 
         else if (PlayerLight) withinLight = true;
 
-        else
-            withinLight = false;
+        else withinLight = false;
 
         if(GetOtherDoor().isinLight())
             this.GetComponent<SpriteRenderer>().sprite = DoorVisual[1];
         else
             this.GetComponent<SpriteRenderer>().sprite = DoorVisual[0];
     }
+
+   
 
 
     public Door GetOtherDoor()
