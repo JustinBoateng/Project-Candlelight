@@ -283,6 +283,8 @@ public class Movement : MonoBehaviour {
 
     private void Interact(String InterType)
     {
+        Debug.Log("Interacting with: " + InterType);
+
         switch (InterType)
         {
             case "Ladder":
@@ -298,6 +300,12 @@ public class Movement : MonoBehaviour {
                 transform.position = OtherDoor.gameObject.transform.position;
                 walkthroughdoor = true;                
                 break;
+
+            case "Elevator":
+                if (walkthroughdoor == true) break;//press up once, go through the door once. No holding to smap back and forth per frame 
+                interactIdle.gameObject.GetComponent<EleSwitch>().FlipTrigger = true;
+                break;
+
         }
     }
 
