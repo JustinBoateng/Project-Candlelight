@@ -12,4 +12,6 @@ public class Item  : MonoBehaviour {
     public int SlotNumber;
     public string SourceType = "";
 
+    
+
 }

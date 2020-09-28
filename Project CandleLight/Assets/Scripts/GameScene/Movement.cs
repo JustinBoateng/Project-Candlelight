@@ -114,7 +114,7 @@ public class Movement : MonoBehaviour {
 
         Lit = (Physics2D.OverlapCircle(transform.position, LightCheckRadius ,LightLayerMask));
 
-        if (Lit) Debug.Log("Within Light, Edge Radius = " + myStandingCollider.edgeRadius);
+        if ((Lit) || (gameObject.layer == LayerMask.NameToLayer("PlayerWithLight"))) Debug.Log("Within Light, Edge Radius = " + myStandingCollider.edgeRadius);
         else Debug.Log("Within Darkness");
 
     }
