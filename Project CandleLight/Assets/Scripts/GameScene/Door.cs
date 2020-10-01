@@ -20,6 +20,13 @@ public class Door : Interactable
     bool PlayerLight;
     [SerializeField] private LayerMask PlayerLayer;
 
+
+    public bool Locked = false;
+    public Sprite[] LockIndicator = new Sprite[2]; //0 = locked //1 = not locked
+    public SpriteRenderer LockLight;
+
+    public bool DayTime = false;
+
     public void Start()
     {
         this.InterType = "Door";
@@ -41,12 +48,17 @@ public class Door : Interactable
 
         else if (PlayerLight) withinLight = true;
 
+        else if (DayTime) withinLight = true;
+
         else withinLight = false;
 
         if(GetOtherDoor().isinLight())
             this.GetComponent<SpriteRenderer>().sprite = DoorVisual[1];
         else
             this.GetComponent<SpriteRenderer>().sprite = DoorVisual[0];
+
+        if (!Locked) LockLight.sprite = LockIndicator[1];
+        else LockLight.sprite = LockIndicator[0];
     }
 
    
@@ -69,4 +81,28 @@ public class Door : Interactable
         return false;
     }
 
+    public bool getLock()
+    {
+        return Locked;
+    }
+
+    public void flipLock()
+    {
+        Locked = !Locked;
+    }
+
+    public void setLock(bool Status)
+    {
+        Locked = Status;
+    }
+
+    public void DayTimeTrigger()
+    {
+        DayTime = true;
+    }
+
+    public void NightTimeTrigger()
+    {
+        DayTime = false;
+    }
 }

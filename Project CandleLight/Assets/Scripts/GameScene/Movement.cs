@@ -67,6 +67,7 @@ public class Movement : MonoBehaviour {
     private bool Lit = false;
     [SerializeField] LayerMask RegularMask;
     [SerializeField] LayerMask HoldingAGlowingObjectMask;
+    private bool Daytime = false;
 
     //Interaction Values
     RaycastHit2D InteractableDetectRay;
@@ -115,6 +116,7 @@ public class Movement : MonoBehaviour {
         Lit = (Physics2D.OverlapCircle(transform.position, LightCheckRadius ,LightLayerMask));
 
         if ((Lit) || (gameObject.layer == LayerMask.NameToLayer("PlayerWithLight"))) Debug.Log("Within Light, Edge Radius = " + myStandingCollider.edgeRadius);
+        else if (Daytime) Debug.Log("Within Light because Master Light is on");
         else Debug.Log("Within Darkness");
 
     }
@@ -179,9 +181,9 @@ public class Movement : MonoBehaviour {
     private void IsOnItem()
     {
         Debug.DrawRay(transform.position + new Vector3(0, -0.25f, 0), transform.right * facing, Color.red);
-        ItemDetectRay = Physics2D.Raycast(transform.position + new Vector3(0, -0.25f, 0), transform.right * facing, 0.5f, ItemsLayerMask);
+        ItemDetectRay = Physics2D.Raycast(transform.position + new Vector3(0, -0.05f, 0), transform.right * facing, 0.5f, ItemsLayerMask);
         //ObjectDetectRay = Physics2D.Raycast(transform.position, transform.right * facing, 0.5f, ItemsLayerMask);
-
+        //itemDetectArea = Physics2D.OverlapCircle(transform.position, ItemDetectDistance * 2, ItemsLayerMask);
 
         if (ItemDetectRay.collider != null)
         {
@@ -295,17 +297,26 @@ public class Movement : MonoBehaviour {
                 break;
 
             case "Door":
-                if (walkthroughdoor == true) break;//press up once, go through the door once. No holding to smap back and forth per frame                
-                Door OtherDoor = interactIdle.gameObject.GetComponent<Door>().GetOtherDoor();
-                transform.position = OtherDoor.gameObject.transform.position;
+                if (walkthroughdoor == true) break;//press up once, go through the door once. No holding to snap back and forth per frame                
+                if (interactIdle.gameObject.GetComponent<Door>().getLock() == true) break; //if the door is locked (true), dont bother
+                Door OtherDoor = interactIdle.gameObject.GetComponent<Door>().GetOtherDoor();//if the other door is within darkness... (to be continued)
+
+                transform.position = new Vector3(OtherDoor.gameObject.transform.position.x, OtherDoor.gameObject.transform.position.y, -1); //we want to move to the same spot in 2d, but NOT in 3d. We want to keep protag in the same z-axis -1 value spot
                 walkthroughdoor = true;                
                 break;
 
             case "Elevator":
-                if (walkthroughdoor == true) break;//press up once, go through the door once. No holding to smap back and forth per frame 
+                if (walkthroughdoor == true) break;//press up once, go through the door once. No holding to snap back and forth per frame 
                 interactIdle.gameObject.GetComponent<EleSwitch>().FlipTrigger = true;
+                walkthroughdoor = true;
                 break;
 
+
+            case "MasterLights":
+                if (walkthroughdoor == true) break;
+                interactIdle.gameObject.GetComponent<LightSystem>().lightFlip();
+                walkthroughdoor = true;
+                break;
         }
     }
 
@@ -330,5 +341,13 @@ public class Movement : MonoBehaviour {
         }
     }
 
-     
+    public void DayTimeTrigger()
+    {
+        Daytime = true;
+    }
+
+    public void NightTimeTrigger()
+    {
+        Daytime = false;
+    }
 }

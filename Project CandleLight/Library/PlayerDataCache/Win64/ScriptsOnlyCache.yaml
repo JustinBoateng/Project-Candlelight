@@ -3,11 +3,18 @@ ScriptsOnlyBuild:
     Assembly-CSharp.dll:
     - CameraFollow
     - Door
+    - EleSwitch
+    - Elevator
+    - Flame
     - Inventory
     - Item
     - Ladder
+    - LightSystem
+    - LightTrigger
     - MenuNavigation
     - Movement
+    - Torch
+    - TorchPuzzle
     Unity.2D.Tilemap.Editor.dll:
     - UnityEditor.Tilemaps.GridPaintingState
     - UnityEditor.Tilemaps.GridPaletteBrushes
@@ -110,11 +117,11 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 62
       Script: {instanceID: 0}
+    - Class: 68
+      Script: {instanceID: 0}
     - Class: 81
       Script: {instanceID: 0}
     - Class: 104
-      Script: {instanceID: 0}
-    - Class: 108
       Script: {instanceID: 0}
     - Class: 114
       Script: {instanceID: 11886}
@@ -161,73 +168,87 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 13112}
     - Class: 114
-      Script: {instanceID: 13260}
+      Script: {instanceID: 13174}
     - Class: 114
-      Script: {instanceID: 13322}
+      Script: {instanceID: 13262}
     - Class: 114
-      Script: {instanceID: 13382}
+      Script: {instanceID: 13324}
     - Class: 114
-      Script: {instanceID: 13522}
+      Script: {instanceID: 13384}
     - Class: 114
-      Script: {instanceID: 13634}
+      Script: {instanceID: 13512}
     - Class: 114
-      Script: {instanceID: 13678}
+      Script: {instanceID: 13526}
     - Class: 114
-      Script: {instanceID: 13752}
+      Script: {instanceID: 13638}
     - Class: 114
-      Script: {instanceID: 13874}
+      Script: {instanceID: 13682}
     - Class: 114
-      Script: {instanceID: 14244}
+      Script: {instanceID: 13756}
     - Class: 114
-      Script: {instanceID: 14564}
+      Script: {instanceID: 13878}
     - Class: 114
-      Script: {instanceID: 14632}
+      Script: {instanceID: 14248}
     - Class: 114
-      Script: {instanceID: 14636}
+      Script: {instanceID: 14386}
     - Class: 114
-      Script: {instanceID: 14652}
+      Script: {instanceID: 14570}
     - Class: 114
-      Script: {instanceID: 14660}
+      Script: {instanceID: 14638}
     - Class: 114
-      Script: {instanceID: 14794}
+      Script: {instanceID: 14642}
     - Class: 114
-      Script: {instanceID: 14834}
+      Script: {instanceID: 14658}
+    - Class: 114
+      Script: {instanceID: 14666}
+    - Class: 114
+      Script: {instanceID: 14738}
+    - Class: 114
+      Script: {instanceID: 14802}
     - Class: 114
       Script: {instanceID: 14842}
     - Class: 114
-      Script: {instanceID: 15076}
+      Script: {instanceID: 14850}
     - Class: 114
-      Script: {instanceID: 15194}
+      Script: {instanceID: 15084}
     - Class: 114
-      Script: {instanceID: 15276}
+      Script: {instanceID: 15202}
     - Class: 114
-      Script: {instanceID: 15288}
+      Script: {instanceID: 15284}
     - Class: 114
-      Script: {instanceID: 15554}
+      Script: {instanceID: 15296}
     - Class: 114
-      Script: {instanceID: 15606}
+      Script: {instanceID: 15506}
     - Class: 114
-      Script: {instanceID: 15744}
+      Script: {instanceID: 15564}
     - Class: 114
-      Script: {instanceID: 15798}
+      Script: {instanceID: 15616}
     - Class: 114
-      Script: {instanceID: 15882}
+      Script: {instanceID: 15754}
     - Class: 114
-      Script: {instanceID: 16016}
+      Script: {instanceID: 15808}
     - Class: 114
-      Script: {instanceID: 16018}
+      Script: {instanceID: 15892}
     - Class: 114
-      Script: {instanceID: 16050}
+      Script: {instanceID: 16026}
     - Class: 114
-      Script: {instanceID: 16078}
+      Script: {instanceID: 16028}
     - Class: 114
-      Script: {instanceID: 16138}
+      Script: {instanceID: 16060}
     - Class: 114
-      Script: {instanceID: 16166}
+      Script: {instanceID: 16088}
     - Class: 114
-      Script: {instanceID: 16216}
+      Script: {instanceID: 16148}
     - Class: 114
-      Script: {instanceID: 16224}
+      Script: {instanceID: 16176}
+    - Class: 114
+      Script: {instanceID: 16226}
+    - Class: 114
+      Script: {instanceID: 16234}
+    - Class: 114
+      Script: {instanceID: 645676}
+    - Class: 114
+      Script: {instanceID: 808132}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -245,6 +266,8 @@ ScriptsOnlyBuild:
     - Class: 223
       Script: {instanceID: 0}
     - Class: 224
+      Script: {instanceID: 0}
+    - Class: 251
       Script: {instanceID: 0}
     - Class: 850595691
       Script: {instanceID: 0}
@@ -587,10 +610,16 @@ ScriptsOnlyBuild:
     className: UIFoldout
   - hash:
       serializedVersion: 2
-      Hash: de9bd1f5bb4cf8ba5d0ade3896c9be58
+      Hash: bf9860d4a3586b9ece86e18d06ea4bd2
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Item
+  - hash:
+      serializedVersion: 2
+      Hash: 3cdd816ec8469fb7cf26ee4936795603
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Torch
   - hash:
       serializedVersion: 2
       Hash: 303ad70ce203ad874efe2965d0fbcff9
@@ -645,6 +674,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.RenderPipelines.Universal.Runtime.dll
     namespaceName: UnityEngine.Rendering.Universal
     className: FilmGrain
+  - hash:
+      serializedVersion: 2
+      Hash: 7452a1bfca49f5739fe0b22c18fa41ce
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Flame
   - hash:
       serializedVersion: 2
       Hash: 223eb1e77cab492c72a223a6d2d2a4e0
@@ -779,6 +814,12 @@ ScriptsOnlyBuild:
     className: UniversalAdditionalLightData
   - hash:
       serializedVersion: 2
+      Hash: d899a47c825656f3a23ed3c45720689c
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Elevator
+  - hash:
+      serializedVersion: 2
       Hash: 67a99c72bf51722a004979b57db87178
     assemblyName: Unity.RenderPipelines.Universal.Runtime.dll
     namespaceName: UnityEngine.Rendering.Universal
@@ -837,6 +878,12 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.EventSystems
     className: Physics2DRaycaster
+  - hash:
+      serializedVersion: 2
+      Hash: 4debe7eb6098c2e2e71043a3c82f7f6c
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: EleSwitch
   - hash:
       serializedVersion: 2
       Hash: a64b8ff703a69f3352c424e9d0bc1c49
@@ -959,7 +1006,7 @@ ScriptsOnlyBuild:
     className: DebugUIHandlerValue
   - hash:
       serializedVersion: 2
-      Hash: 449b3438f2c4f7ef40812d0728ae3009
+      Hash: f6b61d670e6a27072dc33c3f2787d534
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Door
@@ -975,6 +1022,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.RenderPipelines.Universal.Runtime.dll
     namespaceName: UnityEngine.Rendering.Universal
     className: LiftGammaGain
+  - hash:
+      serializedVersion: 2
+      Hash: 303359e557a9b331732b7db7ce7c708a
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: LightTrigger
   - hash:
       serializedVersion: 2
       Hash: 893dbdbfe611d62e230a686ea89f1efd
@@ -1209,8 +1262,20 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
     className: PlayableTrack
+  - hash:
+      serializedVersion: 2
+      Hash: 9627928aa20d6ee9a9e8f3671ac943e4
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: TorchPuzzle
+  - hash:
+      serializedVersion: 2
+      Hash: d22652ad3bafa5d8fb49cd92a7a9283e
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: LightSystem
   platform: 19
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: C:/Users/USER/Desktop/Project-Candlelight/Project CandleLight Alpha
-    0.0.1 Windowed/Project CandleLight.exe
+  playerPath: C:/Users/USER/Desktop/Project-Candlelight/Project Candlelight Build
+    Alpha 0.0.2/Project CandleLight.exe
