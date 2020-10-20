@@ -251,8 +251,9 @@ public class Movement : MonoBehaviour {
                 if (itemIdle.gameObject.GetComponent<Item>().ItemType == "INV")
                 {
                     Debug.Log("INV Item Detected");
+                    InventoryReference.ItemInventory.Add(itemIdle.gameObject.GetComponent<Item>());
                     InventoryReference.SpawnInvButton(itemIdle.gameObject.GetComponent<Item>());
-                    Destroy(itemIdle);
+                    itemIdle.gameObject.SetActive(false);
                     return;
                 }//if it's an inventory item
 
