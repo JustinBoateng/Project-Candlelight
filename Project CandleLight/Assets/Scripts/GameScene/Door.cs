@@ -27,6 +27,14 @@ public class Door : Interactable
 
     public bool DayTime = false;
 
+    public char DoorLetter;
+    //DoorLetter is supposed to reference the particular door with keys and the area.
+
+    public string AreaString;
+    //AreaString is supposed to identify if the keys used on it are even of the same area.
+    //a key can work on a door if the AreaString and DoorLetter match
+
+
     public void Start()
     {
         this.InterType = "Door";
@@ -35,6 +43,7 @@ public class Door : Interactable
 
     public void Update()
     {
+        // Tells the player if the door on the other side is within light-----------------------------------------
         Debug.DrawRay(transform.position + new Vector3(-0.5f, -0.5f, 0), transform.up, Color.blue);
         Debug.DrawRay(transform.position + new Vector3(0, -0.5f, 0), transform.up, Color.blue);
         Debug.DrawRay(transform.position + new Vector3(0.5f, -0.5f, 0), transform.up, Color.blue);
@@ -57,11 +66,18 @@ public class Door : Interactable
         else
             this.GetComponent<SpriteRenderer>().sprite = DoorVisual[0];
 
+
+        //---------------------------------------------------------------------------------------------------------
+
+
+        //Tells the player if the door is locked or not------------------------------------------------------------
         if (!Locked) LockLight.sprite = LockIndicator[1];
         else LockLight.sprite = LockIndicator[0];
+        //---------------------------------------------------------------------------------------------------------
+
     }
 
-   
+
 
 
     public Door GetOtherDoor()

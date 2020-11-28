@@ -12,6 +12,22 @@ public class Item  : MonoBehaviour {
     public int SlotNumber;
     public string SourceType = "";
 
+    public string AreaString;
+    //AreaString is used to reference which Area you got the item from. Useful for keys
+
+    public Item() { }
+    
+    public Item(string i)
+    {
+        ItemName = "Empty";
+        ItemType = "Empty";
+        description = "Empty";
+        code = "Empty";
+        SourceType = "Empty";
+        AreaString = "Empty";
+
+    }
+    //constructor, for the case of making new Items in the Inventory Tab 
 
     public void ItemClone(Item I)
     {
@@ -36,5 +52,6 @@ public class Item  : MonoBehaviour {
         if (I.SourceType != null)
             SourceType = I.SourceType;
     }
+    //ItemClone is used to give a copy of the item to the Inventory Menu
 
 }

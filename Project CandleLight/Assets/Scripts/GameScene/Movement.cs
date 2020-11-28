@@ -89,16 +89,53 @@ public class Movement : MonoBehaviour {
 
     }
 
-    // Update is called once per frame
+    private void FixedUpdate()
+    {
+        if (Input.GetKey(GameManager.GM.left))
+        {
+            horizontal = -1;
+            StrictHorizontal = -1;
+        }
+        else if
+        (Input.GetKey(GameManager.GM.right))
+        {
+            horizontal = 1;
+            StrictHorizontal = 1;
+        }
+        else
+        {
+            horizontal = 0;
+            StrictHorizontal = 0;
+        }
+
+        if (Input.GetKey(GameManager.GM.up)) vertical = 1;
+        else if (Input.GetKey(GameManager.GM.down)) vertical = -1;
+        else
+        {
+            vertical = 0;
+        }
+
+        if (Input.GetKeyDown(GameManager.GM.up) && interactCheck == true) Interact(interactIdle.gameObject.GetComponent<Interactable>().getType());
+    }
+    //putting these functions in fixedupdate rather than in regular update allows them to activate ONLY when the game is unpaused (because physics time moves in fixed update rather than in regular update)
+
+
     void Update()
     {
-        horizontal = Input.GetAxis("Horizontal");
-        StrictHorizontal = Input.GetAxisRaw("Horizontal");
-        vertical = Input.GetAxisRaw("Vertical");
+        //horizontal = Input.GetAxis("Horizontal");
+        //StrictHorizontal = Input.GetAxisRaw("Horizontal");
+        //vertical = Input.GetAxisRaw("Vertical");
 
+
+    
+
+        if (Input.GetKeyDown(GameManager.GM.jump)) Jump();
+        
+        //Button Config Based Movement (Assuming you're using Keyboard)
 
         if (onLadder) HandleLadderMovement();
         else HandleMovement();
+
         RunCheck();
         Grounded = (Physics2D.OverlapCircle(GroundPoint.position, GroundPointCheckRadius, GroundLayerMask) || Physics2D.OverlapCircle(GroundPoint.position, GroundPointCheckRadius, ItemsLayerMask));
         IsOnItem();
@@ -107,26 +144,33 @@ public class Movement : MonoBehaviour {
         if (!Grounded || vertical < 0) canJump = false;
         else canJump = true;
         //JumpState
-
-        if (Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Jump")) Jump();
+        
+        //if (Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("jumpKey")) Jump();
         if (Input.GetKeyDown(KeyCode.Z) || Input.GetButtonDown("Pickup")) PickUp();
-        if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetAxisRaw("Vertical") == 1) && interactCheck == true) Interact(interactIdle.gameObject.GetComponent<Interactable>().getType());
-        if (Input.GetKeyUp(KeyCode.UpArrow)) walkthroughdoor = false;
+        //if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetAxisRaw("Vertical") == 1) && interactCheck == true) Interact(interactIdle.gameObject.GetComponent<Interactable>().getType());
+        //if (Input.GetKeyUp(KeyCode.UpArrow)) walkthroughdoor = false;
+
+        
+        if (vertical == 1) walkthroughdoor = false;
 
         Lit = (Physics2D.OverlapCircle(transform.position, LightCheckRadius ,LightLayerMask));
+
+        if (itemHold!=null)
+            if ((itemHold.GetComponentInChildren<CircleCollider2D>()) && (itemHold.GetComponentInChildren<CircleCollider2D>().isActiveAndEnabled))
+                gameObject.layer = LayerMask.NameToLayer("PlayerWithLight");
+        //if the item emit's a light source, change player's mask to "PlayerWithLight" so that doors detect her as a light source, as well as other things 
+        //here, we're assuming that the player is holding an object that has a light source
+        //the assumption is that all circlecolliders (colliders that are circular specifically) are light source areas
 
         if ((Lit) || (gameObject.layer == LayerMask.NameToLayer("PlayerWithLight"))) Debug.Log("Within Light, Edge Radius = " + myStandingCollider.edgeRadius);
         else if (Daytime) Debug.Log("Within Light because Master Light is on");
         else Debug.Log("Within Darkness");
 
+        //Lit here represents that Protag is within a light source
+
+
     }
 
-
-    private void FixedUpdate()
-    {
-        
-
-    }
 
     private void HandleMovement()
     {
@@ -241,7 +285,10 @@ public class Movement : MonoBehaviour {
 
                     Speed = BaseSpeed / 2;
 
-                    if ((itemHold.GetComponentInChildren<CircleCollider2D>()) && (itemHold.GetComponentInChildren<CircleCollider2D>().isActiveAndEnabled)) gameObject.layer = LayerMask.NameToLayer("PlayerWithLight"); //if the item emit's a light source, change player's mask to "PlayerWithLight" so that doors detect her as a light source, as well as other things 
+                    //if ((itemHold.GetComponentInChildren<CircleCollider2D>()) && (itemHold.GetComponentInChildren<CircleCollider2D>().isActiveAndEnabled)) gameObject.layer = LayerMask.NameToLayer("PlayerWithLight"); 
+                    //if the item emit's a light source, change player's mask to "PlayerWithLight" so that doors detect her as a light source, as well as other things 
+                    //here, we're assuming that the player is holding an object that has a light source
+                    //the assumption is that all circlecolliders (colliders that are circular specifically) are light source areas
 
                     return;
                 }//if it's a liftable item
@@ -250,11 +297,35 @@ public class Movement : MonoBehaviour {
 
                 if (itemIdle.gameObject.GetComponent<Item>().ItemType == "INV")
                 {
-                    Debug.Log("INV Item Detected");
-                    InventoryReference.ItemInventory.Add(itemIdle.gameObject.GetComponent<Item>());
-                    InventoryReference.SpawnInvButton(itemIdle.gameObject.GetComponent<Item>());
-                    itemIdle.gameObject.SetActive(false);
-                    return;
+                    if (itemIdle.gameObject.GetComponent<Keys>())
+                    {
+                        if (InventoryReference.listOfKeyChains.Contains(itemIdle.gameObject.GetComponent<Keys>().AreaString))
+                        {
+                            InventoryReference.KeyPickUp(itemIdle.gameObject.GetComponent<Keys>());
+                            itemIdle.gameObject.SetActive(false);
+                            return;
+                        }
+                        //if a keychain already exists, JUST add the key to the keychain
+
+                        InventoryReference.KeyPickUp(itemIdle.gameObject.GetComponent<Keys>());
+                        InventoryReference.ItemInventory.Add(itemIdle.gameObject.GetComponent<Keys>());
+                        InventoryReference.SpawnInvButton(itemIdle.gameObject.GetComponent<Keys>());
+                        itemIdle.gameObject.SetActive(false);
+                        return;
+                        //else, add the key to your inventory itself
+                    }
+                    //A case SPECIFICALLY for if we're picking up keys
+                    //if we already had a chain or key in inv, 
+                    //then we can just add it to the collection by adding it to the keychain or creating a keychain
+
+                    else
+                    {
+                        Debug.Log("INV Item Detected");
+                        InventoryReference.ItemInventory.Add(itemIdle.gameObject.GetComponent<Item>());
+                        InventoryReference.SpawnInvButton(itemIdle.gameObject.GetComponent<Item>());
+                        itemIdle.gameObject.SetActive(false);
+                        return;
+                    }
                 }//if it's an inventory item
 
             }
