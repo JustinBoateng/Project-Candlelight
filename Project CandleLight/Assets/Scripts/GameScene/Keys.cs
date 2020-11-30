@@ -33,6 +33,26 @@ public class Keys : Item
 
         if (!I.KeyLetter.Equals(""))
             KeyLetter = I.KeyLetter;
+
+        if (I.AreaString != null)
+            AreaString = I.AreaString;
     }
     //we copy the info from the given item into the item button
+
+    public void ItemUse(Door D)
+    {
+        Debug.Log("Using the Keys Class");
+        Debug.Log("KeyArea: " + AreaString + ", DoorArea: " + D.AreaString);
+        Debug.Log("Key: " + KeyLetter + ", Door: " + D.DoorLetter);
+
+        if (AreaString == D.AreaString)
+        {
+            Debug.Log("Area: " + AreaString + ", Door: " + D.AreaString);
+            if (KeyLetter.Equals(D.DoorLetter))
+            {
+                D.flipLock();
+                D.GetOtherDoor().flipLock();
+            }
+        }
+    }
 }

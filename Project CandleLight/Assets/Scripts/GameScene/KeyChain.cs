@@ -34,4 +34,16 @@ public class KeyChain : Item
         if (I.AvailableKeys != null)
             AvailableKeys = I.AvailableKeys;
     }
+
+    public void ItemUse(Door D)
+    {
+        if (AreaString == D.AreaString)
+        {
+            if (AvailableKeys.Contains(D.DoorLetter))
+            {
+                D.flipLock();
+                D.GetOtherDoor().flipLock();
+            }
+        }
+    }
 }

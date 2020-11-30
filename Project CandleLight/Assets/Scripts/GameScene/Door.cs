@@ -29,6 +29,8 @@ public class Door : Interactable
 
     public char DoorLetter;
     //DoorLetter is supposed to reference the particular door with keys and the area.
+    //You're going to need to give each Door its own door letter manually. 
+    //More specifically, only those that are free to be locked/unlocked or doors not attached to puzzles
 
     public string AreaString;
     //AreaString is supposed to identify if the keys used on it are even of the same area.

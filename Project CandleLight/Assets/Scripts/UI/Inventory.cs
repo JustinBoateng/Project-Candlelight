@@ -126,9 +126,6 @@ public class Inventory : MonoBehaviour {
             KeyCell.GetComponent<Keys>().KeyClone(I.GetComponent<Keys>()); //import the information to that button
             KeyCell.gameObject.GetComponent<Image>().sprite = I.sprite;    //set the KeyCell's image
             ItemButtons.Add(KeyCell);                                      //Add the button to the ItemButtons list
-            //Debug.Log("Size of ItemButts is " + ItemButts.Length);
-            //for (int i = 0; i < ItemButts.Length; i++)
-                //Debug.Log("ItemButts at point " + i + " contains " + ItemButts[i].gameObject.name);
             ItemButts[ItemButtsNavigation] = KeyCell.gameObject;
             ItemButtsNavigation++;
             return;
@@ -148,9 +145,9 @@ public class Inventory : MonoBehaviour {
         else
         {
             Button ItemCell = Instantiate(IBPrefab, transform);
-            ItemCell.GetComponent<Item>().ItemClone(I);
-            ItemButtons.Add(ItemCell);
+            ItemCell.GetComponent<Item>().ItemClone(I.GetComponent<Item>());
             ItemCell.gameObject.GetComponent<Image>().sprite = I.sprite;
+            ItemButtons.Add(ItemCell);
             ItemButts[ItemButtsNavigation] = ItemCell.gameObject;
             ItemButtsNavigation++;
             //ItemCell.onClick.AddListener(() => ItemSetA(I));

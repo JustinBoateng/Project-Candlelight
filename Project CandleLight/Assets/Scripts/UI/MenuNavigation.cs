@@ -34,6 +34,8 @@ using UnityEngine.EventSystems;
 
 public class MenuNavigation : MonoBehaviour {
 
+    public static MenuNavigation MN;
+
     // Use this for initialization
     public static bool GameIsPaused;
     public GameObject pauseMenuUI;
@@ -80,6 +82,8 @@ public class MenuNavigation : MonoBehaviour {
 
     private void Start()
     {
+       
+
         //this is basically Resume() but without the ButtonConfigPanel being touched so that Unity can register it to Canvas's MenuNavigation
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
@@ -152,6 +156,9 @@ public class MenuNavigation : MonoBehaviour {
         }
         //giving the buttons for button config functionality
         //--------------------------------------------------------------------------------
+
+        MN = this;
+        //be sure to initialize this instance of the MenuNavigation for other classes to reference freely 
     }
 
     //it works if we use the mouse
@@ -511,5 +518,10 @@ public class MenuNavigation : MonoBehaviour {
     }
     //--------------------------------------------------------------------------------        
     //--------------------------------------------------------------------------------        
+
+    public bool isPaused()
+    {
+        return GameIsPaused;
+    }
 
 }

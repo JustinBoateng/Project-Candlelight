@@ -51,7 +51,16 @@ public class Item  : MonoBehaviour {
 
         if (I.SourceType != null)
             SourceType = I.SourceType;
+
+        if (I.AreaString != null)
+            AreaString = I.AreaString;
     }
+
+    public void ItemUse()
+    {
+        Debug.Log("Using the Item Class");
+    }
+
     //ItemClone is used to give a copy of the item to the Inventory Menu
 
 }

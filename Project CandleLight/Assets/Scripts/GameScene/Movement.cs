@@ -115,7 +115,7 @@ public class Movement : MonoBehaviour {
             vertical = 0;
         }
 
-        if (Input.GetKeyDown(GameManager.GM.up) && interactCheck == true) Interact(interactIdle.gameObject.GetComponent<Interactable>().getType());
+        
     }
     //putting these functions in fixedupdate rather than in regular update allows them to activate ONLY when the game is unpaused (because physics time moves in fixed update rather than in regular update)
 
@@ -155,9 +155,18 @@ public class Movement : MonoBehaviour {
 
         Lit = (Physics2D.OverlapCircle(transform.position, LightCheckRadius ,LightLayerMask));
 
-        if (itemHold!=null)
+        if (itemHold != null)
+        {
             if ((itemHold.GetComponentInChildren<CircleCollider2D>()) && (itemHold.GetComponentInChildren<CircleCollider2D>().isActiveAndEnabled))
                 gameObject.layer = LayerMask.NameToLayer("PlayerWithLight");
+            //holding ANY light source ...
+            //This works only if the Lights are off
+            //...we finna light a torch with a flashlight aren't we?
+
+            if (itemHold.GetComponent<Torch>().LitState != "notLit")
+                gameObject.layer = LayerMask.NameToLayer("PlayerWithLight");
+            //holding a light source from a torch speciifcally
+        }
         //if the item emit's a light source, change player's mask to "PlayerWithLight" so that doors detect her as a light source, as well as other things 
         //here, we're assuming that the player is holding an object that has a light source
         //the assumption is that all circlecolliders (colliders that are circular specifically) are light source areas
@@ -167,6 +176,34 @@ public class Movement : MonoBehaviour {
         else Debug.Log("Within Darkness");
 
         //Lit here represents that Protag is within a light source
+
+
+
+
+        if (Input.GetKeyDown(GameManager.GM.up) && interactCheck == true)
+            Interact(interactIdle.gameObject.GetComponent<Interactable>().getType());
+
+        if (Input.GetButtonDown("ItemA") && !MenuNavigation.MN.isPaused())
+        {
+            if (interactCheck)
+            {
+                Debug.Log("Using Item A");
+                MiniInv.MI.UseItemA(interactIdle.gameObject);
+            }
+
+            MiniInv.MI.UseItemA(MiniInv.MI.ItemA.gameObject);
+        }
+
+        if (Input.GetButtonDown("ItemB") && !MenuNavigation.MN.isPaused())
+        {
+            if (interactCheck)
+            {
+                Debug.Log("Using Item B");
+                MiniInv.MI.UseItemB(interactIdle.gameObject);
+            }
+
+            MiniInv.MI.UseItemB(MiniInv.MI.ItemB.gameObject);
+        }
 
 
     }
