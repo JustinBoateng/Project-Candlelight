@@ -19,6 +19,8 @@ public class Elevator : MonoBehaviour
     public bool ElevatorMoving = false;
 
 
+    public BoxCollider2D ElevatorArea;
+
     //be sure to attach an Interactable Script to the Elevator object with the Type "Elevator"
     private void Start()
     {
@@ -66,6 +68,7 @@ public class Elevator : MonoBehaviour
         DoorA.SetActive(true);
         DoorB.SetActive(true);
         ElevatorMoving = true;
+        
     }
 
     void DoorOpen()
@@ -102,4 +105,49 @@ public class Elevator : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        //float x = collision.gameObject.transform.localScale.x;
+        //float y = collision.gameObject.transform.localScale.y;
+        //float z = collision.gameObject.transform.localScale.z;
+        //var originalScale = collision.gameObject.transform.localScale;
+        //var originalxpos = collision.gameObject.transform.position.x;
+        //var originalypos = collision.gameObject.transform.position.y;
+        //var originalzpos = collision.gameObject.transform.position.z;
+
+        //collision.gameObject.transform.SetParent(gameObject.transform, true);
+        //collision.gameObject.transform.localScale = originalScale;
+        /*collision.gameObject.transform.position = new Vector3(
+            originalxpos,
+            originalypos,
+            originalzpos
+            );
+        if (ElevatorMoving && collision.gameObject.GetComponent<Movement>())
+        {
+            //collision.gameObject.transform.position = this.transform.position;
+            collision.gameObject.transform.SetParent(gameObject.transform);
+            collision.gameObject.transform.localScale = originalScale;
+            //collision.gameObject.transform.localScale = new Vector3(0.69f, 0.69f, 1);
+                x / this.GetComponentInParent<Transform>().localScale.x,
+                y / this.GetComponentInParent<Transform>().localScale.y,
+                z / this.GetComponentInParent<Transform>().localScale.z
+                ); 
+        }*/
+        
+        if (collision.gameObject.tag == "Player")
+        {
+            collision.gameObject.transform.SetParent(this.transform);
+            //collision.gameObject.transform.localScale = originalScale;
+            //collision.gameObject.transform.localScale = new Vector3(x,y,z);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        //var originalScale = collision.gameObject.transform.localScale;
+        //collision.transform.SetParent(null, true);
+        //collision.gameObject.transform.position = this.transform.position;
+
+        //collision.gameObject.transform.localScale = originalScale;
+    }
 }
