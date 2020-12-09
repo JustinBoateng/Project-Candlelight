@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class MiniInv : MonoBehaviour
 {
-    public static MiniInv MI;
+    public Movement AttachedPlayer;
 
     public GameObject ItemADisplay;
     public GameObject ItemBDisplay;
@@ -15,29 +15,43 @@ public class MiniInv : MonoBehaviour
     public Item ItemB;
 
     //public Inventory InvReference;
+    public bool FlashlightEquipped;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        MI = this;
-    }
 
     // Update is called once per frame
     void Update()
     {
         //if "A is pressed, run UseItemA"
         //Let Player have a reference to MiniInv
-   
+
+        if (ItemA)
+        {
+            if (ItemA.code == "Flashlight")
+            {
+                FlashlightEquipped = true;
+            }
+        }
+
+        else if (ItemB)
+        {
+            if (ItemB.code == "Flashlight")
+            {
+                FlashlightEquipped = true;
+            }
+        }
+
+        if (!FlashlightEquipped) AttachedPlayer.FlipOff("Battery");
+
     }
 
     public void MiniInvSetA(Item A)
     {
-        if(ItemB == A)
+        if (ItemB == A)
         {
             ItemB = null;
             ItemBDisplay.GetComponent<Image>().sprite = null;
         }
-            ItemA = A;
+        ItemA = A;
 
         ItemADisplay.GetComponent<Image>().sprite = A.sprite;
 
@@ -61,14 +75,17 @@ public class MiniInv : MonoBehaviour
 
     public void UseItemA(GameObject A)
     {
-        if (A.GetComponent<Door>()) 
-           {
-            if(ItemA.GetComponent<Keys>())
-             ItemA.GetComponent<Keys>().ItemUse(A.GetComponent<Door>());
+        if (A.GetComponent<Door>())
+        {
+            if (ItemA.GetComponent<Keys>())
+                ItemA.GetComponent<Keys>().ItemUse(A.GetComponent<Door>());
 
             else if (ItemA.GetComponent<KeyChain>())
-             ItemA.GetComponent<KeyChain>().ItemUse(A.GetComponent<Door>());
+                ItemA.GetComponent<KeyChain>().ItemUse(A.GetComponent<Door>());
         }
+
+
+
     }
 
     public void UseItemB(GameObject B)
@@ -81,6 +98,34 @@ public class MiniInv : MonoBehaviour
             else if (ItemB.GetComponent<KeyChain>())
                 ItemB.GetComponent<KeyChain>().ItemUse(B.GetComponent<Door>());
         }
+
     }
+
+
+    public void UseItemASolo()
+    {
+        if (ItemA.code == "Flashlight")
+        {
+
+            
+            
+                AttachedPlayer.FlipOn("Battery");
+            
+
+
+        }
+    }
+
+    public void UseItemBSolo()
+    {
+        if (ItemB.code == "Flashlight")
+        {
+            Debug.Log("Using Flashlight");
+
+            AttachedPlayer.FlipOn("Battery");
+        }
+    }
+    
+
     //------------------------------------------------------------------------------------------------
 }

@@ -492,22 +492,22 @@ public class MenuNavigation : MonoBehaviour {
         switch (index)
         {
             case "0":
-                Screen.SetResolution(1152, 648, true);
+                Screen.SetResolution(840, 448, false);
                 break;
             //fullscreen
 
             case "1":
-                Screen.SetResolution(1200, 768, true);
+                Screen.SetResolution(1200, 768, false);
                 break;
             //fullscreen
 
             case "2":
-                Screen.SetResolution(1360, 796, true);
+                Screen.SetResolution(1360, 796, false);
                 break;
             //fullscreen
 
             case "3":
-                Screen.SetResolution(1980, 1000, true);
+                Screen.SetResolution(1980, 1000, false);
                 break;
             //fullscreen
 

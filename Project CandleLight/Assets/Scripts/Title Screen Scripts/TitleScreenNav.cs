@@ -13,6 +13,8 @@ public class TitleScreenNav : MonoBehaviour
     {
         HideFilePanel();
         UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(FirstButton);
+        Screen.fullScreen = !Screen.fullScreen;
+        Screen.SetResolution(840, 448, false);
     }
 
     // Update is called once per frame

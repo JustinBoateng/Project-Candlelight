@@ -77,8 +77,16 @@ public class Movement : MonoBehaviour {
     bool onLadder = false;
     private bool walkthroughdoor = false;
 
+    public MiniInv MI;
+    public GameObject[] InvItemLightTriggers;
+    public int[] Energyleft;
+    public int[] MaxEnergyleft;
+    public int[] EnergyRate;
+    public string InvItmEnergyType; 
+ 
     // Use this for initialization
-    void Start () {
+    void Start ()
+    {
         myRigidBody = gameObject.GetComponent<Rigidbody2D>();
         myStandingCollider.enabled = true;
         myCrouchingCollider.enabled = false;
@@ -87,7 +95,23 @@ public class Movement : MonoBehaviour {
 
         baseStandingColliderSizeX = myStandingCollider.size.x;
 
+        Energyleft = new int [2];
+        MaxEnergyleft = new int[2];
+        EnergyRate = new int[2];
+        InvItmEnergyType = "Empty";
+        for (int i = 0; i < Energyleft.Length; i++)
+        {
+            Energyleft[i] = 100;
+            MaxEnergyleft[i] = 100;
+            EnergyRate[i] = 0;
+        }
+
+        InvokeRepeating("EnergyCalc", 2.0f, 0.5f);
+
     }
+
+  
+
 
     private void FixedUpdate()
     {
@@ -126,8 +150,8 @@ public class Movement : MonoBehaviour {
         //StrictHorizontal = Input.GetAxisRaw("Horizontal");
         //vertical = Input.GetAxisRaw("Vertical");
 
+        Debug.Log("Using Energy Type: " + InvItmEnergyType);
 
-    
 
         if (Input.GetKeyDown(GameManager.GM.jump)) Jump();
         
@@ -188,23 +212,26 @@ public class Movement : MonoBehaviour {
             if (interactCheck)
             {
                 Debug.Log("Using Item A");
-                MiniInv.MI.UseItemA(interactIdle.gameObject);
+                MI.UseItemA(interactIdle.gameObject);
             }
 
-            MiniInv.MI.UseItemA(MiniInv.MI.ItemA.gameObject);
+            Debug.Log("Using Item B Solo");
+            MI.UseItemASolo();
         }
+
 
         if (Input.GetButtonDown("ItemB") && !MenuNavigation.MN.isPaused())
         {
             if (interactCheck)
             {
                 Debug.Log("Using Item B");
-                MiniInv.MI.UseItemB(interactIdle.gameObject);
+                MI.UseItemB(interactIdle.gameObject);
             }
 
-            MiniInv.MI.UseItemB(MiniInv.MI.ItemB.gameObject);
+            Debug.Log("Using Item B Solo");
+            MI.UseItemBSolo();
         }
-
+        
 
     }
 
@@ -459,4 +486,55 @@ public class Movement : MonoBehaviour {
     {
         Daytime = false;
     }
+
+    public void FlipOn(String IIET)
+    {
+        Debug.Log("Using Flashlight");
+        if (IIET == "Battery")
+        {
+
+            InvItmEnergyType = IIET;
+
+            Debug.Log("Using Energy Type: " + InvItmEnergyType);
+
+
+            GameObject Lgt = Instantiate(InvItemLightTriggers[0], transform);
+            Lgt.gameObject.SetActive(true);
+            Lgt.transform.position = HoldPoint.position + new Vector3(0.9f, 0, 0);
+            Debug.Log("Spawned a light source");
+
+            EnergyRate[0] = 1;
+        }
+    }
+
+    public void FlipOff(String IIET)
+    {
+        InvItmEnergyType = "Empty"; 
+
+        if (IIET == "Battery")
+        {
+
+            
+            Destroy(GameObject.Find("Lgt"));
+            EnergyRate[0] = 0;
+        }
+
+
+
+    }
+
+    public void EnergyCalc()
+    {
+        if (InvItmEnergyType == "Battery")
+        {
+            gameObject.layer = LayerMask.NameToLayer("PlayerWithLight");
+            if (Energyleft[0] == 0) return;
+            Energyleft[0] = Energyleft[0] - EnergyRate[0];
+
+            return;
+        }
+
+        else if (!Lit) gameObject.layer = LayerMask.NameToLayer("Player");
+    }
+
 }

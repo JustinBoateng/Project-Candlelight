@@ -5,7 +5,7 @@ using UnityEngine.Experimental.Rendering.LWRP;
 
 public class LightTrigger : MonoBehaviour
 {
-    public CircleCollider2D LightArea;
+    public Collider2D LightArea;
     public UnityEngine.Experimental.Rendering.Universal.Light2D Illumination;
 
 

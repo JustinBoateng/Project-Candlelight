@@ -1,0 +1,9 @@
+Use 
+W S A D: to move
+I: use ItemA / Set ItemA from the Inventory
+O: use ItemB / Set ItemB from the Inventory
+P: Pause
+Z: Pickup Items
+Press A or D twice in a row: Run
+
+Consider the goal to be to turn on the master lights
