@@ -82,8 +82,10 @@ public class Movement : MonoBehaviour {
     public int[] Energyleft;
     public int[] MaxEnergyleft;
     public int[] EnergyRate;
-    public string InvItmEnergyType; 
- 
+    public string InvItmEnergyType;
+
+    public bool InvItmLightFlip = false;
+
     // Use this for initialization
     void Start ()
     {
@@ -95,9 +97,9 @@ public class Movement : MonoBehaviour {
 
         baseStandingColliderSizeX = myStandingCollider.size.x;
 
-        Energyleft = new int [2];
-        MaxEnergyleft = new int[2];
-        EnergyRate = new int[2];
+        Energyleft = new int [InvItemLightTriggers.Length];
+        MaxEnergyleft = new int[InvItemLightTriggers.Length];
+        EnergyRate = new int[InvItemLightTriggers.Length];
         InvItmEnergyType = "Empty";
         for (int i = 0; i < Energyleft.Length; i++)
         {
@@ -200,7 +202,8 @@ public class Movement : MonoBehaviour {
         else Debug.Log("Within Darkness");
 
         //Lit here represents that Protag is within a light source
-
+        if (InvItmLightFlip) gameObject.layer = LayerMask.NameToLayer("PlayerWithLight");
+        else if (!InvItmLightFlip) gameObject.layer = LayerMask.NameToLayer("Player");
 
 
 
@@ -438,7 +441,8 @@ public class Movement : MonoBehaviour {
                 Door OtherDoor = interactIdle.gameObject.GetComponent<Door>().GetOtherDoor();//if the other door is within darkness... (to be continued)
 
                 transform.position = new Vector3(OtherDoor.gameObject.transform.position.x, OtherDoor.gameObject.transform.position.y, -1); //we want to move to the same spot in 2d, but NOT in 3d. We want to keep protag in the same z-axis -1 value spot
-                walkthroughdoor = true;                
+                walkthroughdoor = true;
+                //gameObject.transform.SetParent(GameObject.Find("PlayerObject").transform);
                 break;
 
             case "Elevator":
@@ -487,54 +491,117 @@ public class Movement : MonoBehaviour {
         Daytime = false;
     }
 
-    public void FlipOn(String IIET)
+    public void FlipItemLight(String IIET)
     {
         Debug.Log("Using Flashlight");
-        if (IIET == "Battery")
+        if (InvItmLightFlip == false)
         {
 
-            InvItmEnergyType = IIET;
+            if (IIET == "Battery")
+            {
 
-            Debug.Log("Using Energy Type: " + InvItmEnergyType);
+                InvItmEnergyType = IIET;
+
+                Debug.Log("Using Energy Type: " + InvItmEnergyType);
 
 
-            GameObject Lgt = Instantiate(InvItemLightTriggers[0], transform);
-            Lgt.gameObject.SetActive(true);
-            Lgt.transform.position = HoldPoint.position + new Vector3(0.9f, 0, 0);
-            Debug.Log("Spawned a light source");
+                GameObject Lgt = Instantiate(InvItemLightTriggers[0], transform);
+                Lgt.gameObject.SetActive(true);
+                Lgt.transform.position = HoldPoint.position + new Vector3(0.9f * facing, 0, 0); //keep in mind the player's facing position
+                Debug.Log("Spawned a light source");
 
-            EnergyRate[0] = 1;
+                EnergyRate[0] = 1;
+            }
+
+            else if (IIET == "Oil")
+            {
+
+                InvItmEnergyType = IIET;
+
+                Debug.Log("Using Energy Type: " + InvItmEnergyType);
+
+
+                GameObject Lgt = Instantiate(InvItemLightTriggers[1], transform);
+                Lgt.gameObject.SetActive(true);
+                Lgt.transform.position = HoldPoint.position + new Vector3(0.1f * facing, 0, 0); //keep in mind the player's facing position
+                Debug.Log("Spawned a light source");
+
+                EnergyRate[1] = 1;
+            }
+
+            InvItmLightFlip = true;
         }
+
+        
+        else if (InvItmLightFlip == true)
+        {
+            if (InvItmEnergyType != "" && InvItmEnergyType != IIET)
+            {
+                //if the light is already on and you want to click-on another inv lightsource
+                FlipOff(InvItmEnergyType);
+                //turn off the current light source 
+                //before putting on another
+                FlipItemLight(IIET);
+                //turn on the chosen light
+                return;
+                //exit the function
+            }
+
+            if (IIET == "Battery")
+            {
+                InvItmEnergyType = "";
+                Destroy(GameObject.Find(InvItemLightTriggers[0].name + "(Clone)"));
+                EnergyRate[0] = 0;
+            }
+
+            else if (IIET == "Oil")
+            {
+                InvItmEnergyType = "";
+                Destroy(GameObject.Find(InvItemLightTriggers[1].name + "(Clone)"));
+                EnergyRate[1] = 0;
+            }
+
+            InvItmLightFlip = false;
+        }
+
     }
 
-    public void FlipOff(String IIET)
+    public void FlipOff(string IIET)
     {
-        InvItmEnergyType = "Empty"; 
-
         if (IIET == "Battery")
         {
-
-            
-            Destroy(GameObject.Find("Lgt"));
+            Destroy(GameObject.Find(InvItemLightTriggers[0].name + "(Clone)"));
             EnergyRate[0] = 0;
         }
 
+        else if (IIET == "Oil")
+        {
+            Destroy(GameObject.Find(InvItemLightTriggers[1].name + "(Clone)"));
+            EnergyRate[1] = 0;
+        }
 
-
+        InvItmLightFlip = false;
     }
 
     public void EnergyCalc()
     {
         if (InvItmEnergyType == "Battery")
         {
-            gameObject.layer = LayerMask.NameToLayer("PlayerWithLight");
             if (Energyleft[0] == 0) return;
             Energyleft[0] = Energyleft[0] - EnergyRate[0];
 
             return;
         }
 
-        else if (!Lit) gameObject.layer = LayerMask.NameToLayer("Player");
+        if (InvItmEnergyType == "Oil")
+        {
+            if (Energyleft[1] == 0) return;
+            Energyleft[1] = Energyleft[1] - EnergyRate[1];
+
+            return;
+        }
+
+        else if (InvItmEnergyType == "") gameObject.layer = LayerMask.NameToLayer("Player");
     }
 
 }

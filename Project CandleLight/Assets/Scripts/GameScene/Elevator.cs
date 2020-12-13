@@ -148,6 +148,6 @@ public class Elevator : MonoBehaviour
         //collision.transform.SetParent(null, true);
         //collision.gameObject.transform.position = this.transform.position;
 
-        //collision.gameObject.transform.localScale = originalScale;
+        collision.transform.SetParent(GameObject.Find("PlayerObject").transform);
     }
 }

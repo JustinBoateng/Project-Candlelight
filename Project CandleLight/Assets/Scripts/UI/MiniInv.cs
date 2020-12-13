@@ -75,6 +75,8 @@ public class MiniInv : MonoBehaviour
 
     public void UseItemA(GameObject A)
     {
+        if (ItemA == null) return;
+
         if (A.GetComponent<Door>())
         {
             if (ItemA.GetComponent<Keys>())
@@ -90,6 +92,8 @@ public class MiniInv : MonoBehaviour
 
     public void UseItemB(GameObject B)
     {
+        if (ItemB == null) return;
+
         if (B.GetComponent<Door>())
         {
             if (ItemB.GetComponent<Keys>())
@@ -104,25 +108,34 @@ public class MiniInv : MonoBehaviour
 
     public void UseItemASolo()
     {
+        if (ItemA == null) return;
+
         if (ItemA.code == "Flashlight")
         {
+        
+                AttachedPlayer.FlipItemLight("Battery");
 
-            
-            
-                AttachedPlayer.FlipOn("Battery");
-            
+        }
+        if (ItemA.code == "Lanturn")
+        {
 
+            AttachedPlayer.FlipItemLight("Oil");
 
         }
     }
 
     public void UseItemBSolo()
     {
+        if (ItemB == null) return;
+
         if (ItemB.code == "Flashlight")
         {
-            Debug.Log("Using Flashlight");
+            AttachedPlayer.FlipItemLight("Battery");
+        }
 
-            AttachedPlayer.FlipOn("Battery");
+        if (ItemB.code == "Lanturn")
+        {
+            AttachedPlayer.FlipItemLight("Oil");
         }
     }
     
