@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-
+using System.Threading;
 
 /*Attached to the canvas
     Toggles 
@@ -275,7 +275,7 @@ public class MenuNavigation : MonoBehaviour {
     public void OnGUI() 
     {
         keyEvent = Event.current; //keyEvent will gain Event.Current (the event that is currently happening in the GUI during that frame)
-        if (keyEvent.isKey  && waitingForKey) //if there is a keyboard input and we are currently waiting for a key
+        if (keyEvent.isKey  && waitingForKey && !Input.GetKey(KeyCode.Return) && !Input.GetKeyDown(KeyCode.Return) && !Input.GetKeyUp(KeyCode.Return)) //if there is a keyboard input and we are currently waiting for a key
         {            
                 newKey = keyEvent.keyCode;
                 waitingForKey = false;            
@@ -317,9 +317,11 @@ public class MenuNavigation : MonoBehaviour {
         //while (!keyEvent.isKey || Input.GetKey(KeyCode.Return))// || Input.GetKeyUp(KeyCode.Return))
         //    yield return null;
 
-        yield return new WaitWhile(() => !keyEvent.isKey || Input.GetKey(KeyCode.Return));
+        //newKey = new KeyCode();
+        
+        yield return new WaitWhile(() => !keyEvent.isKey || Input.GetKeyDown(KeyCode.Return) || Input.GetKeyUp(KeyCode.Return));
 
-        Debug.Log("Input received");
+        Debug.Log("Input was: " + newKey.ToString());
 
     }
     //this will be a control statement in our other coroutine
